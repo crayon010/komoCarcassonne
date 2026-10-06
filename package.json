@@ -1,0 +1,25 @@
+{
+  "name": "carcassonne",
+  "version": "1.0.0",
+  "description": "卡卡颂双人对战：Node WebSocket 房间转发 + Vue 3 前端",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "start": "npm run build && node server.js",
+    "tiles": "node --env-file-if-exists=.env gen-tiles.js",
+    "deck": "node --env-file-if-exists=.env gen-deck.js",
+    "test": "node test-game.js && node test.js",
+    "format": "prettier --write \"src/**/*\" \"*.js\" \"index.html\""
+  },
+  "type": "commonjs",
+  "dependencies": {
+    "vue": "^3.5.43",
+    "ws": "^8.22.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.9",
+    "prettier": "^3.9.9",
+    "vite": "^8.3.2"
+  }
+}

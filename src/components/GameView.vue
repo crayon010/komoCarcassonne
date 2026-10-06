@@ -35,7 +35,6 @@ const scoreRows = computed(() => [
 ]);
 
 const barPos = computed(() => {
-  // 动作条锚定在所放碎片正下方
   if (S.phase !== "meeple" || !S.pending || !S.view) return null;
   const [tx, ty] = S.pending.split(",").map(Number);
   const { ox, oy, cell } = S.view;
@@ -48,7 +47,6 @@ const barPos = computed(() => {
 });
 
 const verdict = computed(() => {
-  // 游戏结束弹框：WIN / LOSE / DRAW
   if (!S.G || !S.G.over) return null;
   const you = S.G.scores[S.mySeat],
     opp = S.G.scores[1 - S.mySeat];
@@ -123,7 +121,7 @@ onBeforeUnmount(() => {
 
     <div class="actionBar" v-if="barPos" :style="barPos">
       <button class="skipBtn" @click="finishMove(null)">Skip</button>
-      <button class="undoBtn" title="撤销当前碎片放置" @click="undoPlace">
+      <button class="undoBtn" title="撤销本次放置" @click="undoPlace">
         ↩
       </button>
     </div>

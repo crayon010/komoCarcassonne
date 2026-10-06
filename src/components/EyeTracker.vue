@@ -3,10 +3,10 @@
 import { ref, onMounted, onBeforeUnmount } from "vue";
 
 const box = ref(null);
-const tilt = ref(0); // 双眼整体倾斜角度
+const tilt = ref(0);
 const farShrinkL = ref(false); // 左眼缩小（光标在右侧时）
-const farShrinkR = ref(false);
-const lookL = ref({ x: 50, y: 50 }); // 瞳孔位置（眼内百分比）
+const farShrinkR = ref(false); // 右眼缩小（光标在左侧时）
+const lookL = ref({ x: 50, y: 50 });
 const lookR = ref({ x: 50, y: 50 });
 let raf = 0;
 const st = { mx: -999, my: -999 };
@@ -45,12 +45,10 @@ function apply() {
   lookR.value = eyeAt(cx + r.width * 0.16, cy);
 
   if (inside) {
-    // 块内：双眼正常追踪
     farShrinkL.value = farShrinkR.value = false;
     tilt.value = 0;
     return;
   }
-  // 块外：远侧眼缩小、整对眼朝光标方向倾斜（探头）
   const side = st.mx < cx ? -1 : 1; // 光标在左 → 右眼远
   const outside = Math.min(
     1,
@@ -72,16 +70,10 @@ onBeforeUnmount(() => {
   <div class="eyeBox" ref="box">
     <div class="eyePair" :style="{ transform: `rotate(${tilt}deg)` }">
       <div class="eye" :class="{ shrink: farShrinkL }">
-        <div
-          class="pupil"
-          :style="{ left: lookL.x + '%', top: lookL.y + '%' }"
-        ></div>
+        <div class="pupil" :style="{ left: lookL.x + '%', top: lookL.y + '%' }"></div>
       </div>
       <div class="eye" :class="{ shrink: farShrinkR }">
-        <div
-          class="pupil"
-          :style="{ left: lookR.x + '%', top: lookR.y + '%' }"
-        ></div>
+        <div class="pupil" :style="{ left: lookR.x + '%', top: lookR.y + '%' }"></div>
       </div>
     </div>
   </div>

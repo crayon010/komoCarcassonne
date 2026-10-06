@@ -23,7 +23,7 @@ const T = (e, cities = [], roads = [], cl = false, p = false) => ({
   cl,
   p,
 });
-// 牌表按 tiles/全路型.txt（原版 24 种 72 张，含起始牌 D×1）；分段=城/路所贴边
+// 原版牌表 24 种 72 张（清单见 tiles/prompts.md，D 含起始牌 ×1）；分段=城/路所贴边
 const TYPE_DEFS = [
   [8, T("RFRF", [], [["N", "S"]])], // U 直路
   [9, T("RRFF", [], [["N", "E"]])], // V 弯道
@@ -129,8 +129,7 @@ function legalSpots(G, def, rot) {
   return spots;
 }
 
-// 全量重算连通段（牌最多 71 张，重算比增量合并少一整类同步 bug）。
-// 返回 {aggs, find}：aggs[root] = {kind, tiles:Set, open:Set, meeples:{seat:n}, pennants, canon}
+// 全量重算连通段（牌最多 71 张，重算比增量合并少一整类同步 bug）
 function computeFeatures(G) {
   const parent = {};
   const find = (a) => {

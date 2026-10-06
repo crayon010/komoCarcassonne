@@ -11,10 +11,10 @@ const C = {
   wall: "#e9cd96",
   roof: "#e08794",
   base: "#7a5a50",
-  shield: "#c9ced4", // 银灰色
+  shield: "#c9ced4",
 };
 
-let fxDone = new Set(); // 已动画过的得分事件（按日志行号）；重开新局时清空
+let fxDone = new Set(); // 已动画过的得分事件（按日志行号），新局清空
 export function resetFxMemo() {
   fxDone.clear();
 }
@@ -108,7 +108,6 @@ function roadPath4(ctx, px, py, u, seg) {
   const P = (p) => [px + p[0] * u, py + p[1] * u];
   ctx.beginPath();
   if (seg.length === 1) {
-    // 尽头路：边中点 → 地块中心
     ctx.moveTo(...P(MID4[seg[0]]));
     ctx.lineTo(...P([2, 2]));
     return;
@@ -125,7 +124,7 @@ function roadPath4(ctx, px, py, u, seg) {
     ctx.arc(px + cx * u, py + cy * u, 2 * u, a0, a1, true);
     return;
   }
-  ctx.moveTo(...P(MID4[seg[0]])); // 对边直穿
+  ctx.moveTo(...P(MID4[seg[0]]));
   ctx.lineTo(...P(MID4[seg[1]]));
 }
 
@@ -155,7 +154,7 @@ export function drawBoard(cv, S) {
   ctx.save();
   ctx.translate(camX, camY);
   ctx.scale(zoom, zoom);
-  ctx.strokeStyle = C.grid; // 全屏网格（世界坐标）
+  ctx.strokeStyle = C.grid;
   ctx.lineWidth = 1 / zoom;
   const wx0 = -camX / zoom,
     wy0 = -camY / zoom,
@@ -179,7 +178,6 @@ export function drawBoard(cv, S) {
     drawTile(ctx, x * TILE, y * TILE, TILE, Carc.rotated(d, rot));
   }
   if (S.lastPlaced && G.board[S.lastPlaced]) {
-    // 上一次放置位置的荧光高亮
     const [lx, ly] = S.lastPlaced.split(",").map(Number);
     const z = S.cam ? S.cam.zoom : 1;
     ctx.save();
@@ -196,13 +194,11 @@ export function drawBoard(cv, S) {
     ctx.restore();
   }
   if (S.phase === "tile" && S.G.current) {
-    // 可放位置淡色填充提示
     ctx.fillStyle = "rgba(255, 226, 140, .22)";
     for (const [sx, sy] of Carc.legalSpots(G, G.current, S.uiRot))
       ctx.fillRect(sx * TILE, sy * TILE, TILE, TILE);
   }
   if (S.phase === "tile" && S.mouse && S.G.current) {
-    // 碎片跟随鼠标：吸附网格，合法绿框 / 非法红框
     const cx = Math.floor((S.mouse.x - camX) / cell),
       cy = Math.floor((S.mouse.y - camY) / cell);
     const ok = Carc.canPlace(G, cx, cy, G.current, S.uiRot);
@@ -221,7 +217,6 @@ export function drawBoard(cv, S) {
     );
   }
   if (S.phase === "meeple" && S.pending) {
-    // 已放砖高亮 + 可放跟随者的圆圈
     const [tx, ty] = S.pending.split(",").map(Number);
     ctx.strokeStyle = "#9fd99f";
     ctx.lineWidth = 3 / zoom;
@@ -260,7 +255,7 @@ export function drawBoard(cv, S) {
     ctx.lineWidth = TILE * 0.03;
     ctx.stroke();
   }
-  // —— 得分动画：跟随者淡出 + “+N” 飘字（由 scorePass 记录的事件驱动，双端通用）——
+  // —— 得分动画：跟随者淡出 + “+N” 飘字（scorePass 记录事件，双端通用）——
   const newLines = G.log.slice(S.logSeen || 0).map((l) => l.m);
   const oldSeen = S.logSeen || 0;
   S.logSeen = G.log.length;
@@ -306,7 +301,6 @@ export function drawBoard(cv, S) {
   }
   ctx.restore();
   if (S.toast) {
-    // 弃牌提示条（屏幕空间，顶部居中，渐隐）
     const age = performance.now() - S.toast.t0;
     if (age > 2200) S.toast = null;
     else {
@@ -332,7 +326,6 @@ export function drawBoard(cv, S) {
 }
 
 export function drawCurrent(cv, S) {
-  // 右侧面板的当前牌预览
   const ctx = cv.getContext("2d");
   ctx.clearRect(0, 0, cv.width, cv.height);
   if (!S.G) return;
@@ -345,7 +338,7 @@ export function drawCurrent(cv, S) {
 }
 
 function drawTile(ctx, px, py, s, rd) {
-  const u = s / 4; // 4×4 子格 → 像素
+  const u = s / 4;
   ctx.fillStyle = C.grass;
   ctx.fillRect(px, py, s, s);
   ctx.save();
@@ -371,7 +364,7 @@ function drawTile(ctx, px, py, s, rd) {
   if (rd.cl) chapel(ctx, px, py, u);
   if (rd.p && rd.cities.length) pennant(ctx, px, py, u, rd.cities[0]);
   ctx.restore();
-  ctx.strokeStyle = C.grid; // 白色细边，与网格线一体
+  ctx.strokeStyle = C.grid; // 与桌面网格同色，接缝一体
   ctx.lineWidth = Math.max(1.5, s * 0.035);
   ctx.strokeRect(px, py, s, s);
 }

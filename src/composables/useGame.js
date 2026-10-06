@@ -82,7 +82,7 @@ function handleMsg(msg) {
     if (fresh) {
       resetFxMemo();
       S.logSeen = S.G.log.length;
-    } // 重连：跳过历史动画
+    }
     if (prevKeys) {
       // 记录对手刚放置的碎片（荧光高亮）
       const added = Object.keys(S.G.board).find((k2) => !prevKeys.has(k2));
@@ -186,7 +186,6 @@ function finishMove(meeple) {
 }
 
 function undoPlace() {
-  // 撤销当前碎片放置，恢复跟随鼠标
   if (S.phase !== "meeple" || !S.pending) return;
   delete S.G.board[S.pending];
   S.G.current = S.savedTile;
@@ -228,11 +227,10 @@ function cvClick(e) {
 function onMouseMove(e) {
   S.mouse = { x: e.clientX, y: e.clientY };
   if (S.drag && S.cam) {
-    // 左键拖拽平移画布（位移 >4px 才算拖拽，否则视为点击）
     const dx = e.clientX - S.drag.x,
       dy = e.clientY - S.drag.y;
     if (S.drag.moved || Math.hypot(dx, dy) > 7) {
-      // 7px 内视为点击抖动，不进入平移
+      // 位移 >7px 才算拖拽，否则视为点击
       S.drag.moved = true;
       S.cam.x = S.drag.camX + dx;
       S.cam.y = S.drag.camY + dy;
@@ -259,7 +257,6 @@ function onMouseLeave() {
   S.drag = null;
 }
 function onWheel(e) {
-  // 滚轮缩放（以光标为中心）
   if (!S.cam) return;
   const f = e.deltaY < 0 ? 1.15 : 1 / 1.15;
   const nz = Math.min(2.5, Math.max(0.45, S.cam.zoom * f));

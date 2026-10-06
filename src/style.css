@@ -46,12 +46,6 @@ h1 {
   margin: 0 0 2px;
   cursor: pointer;
 }
-.tagline {
-  color: var(--muted);
-  max-width: 40ch;
-  margin: 0.8rem auto 0;
-  font-size: 0.95rem;
-}
 .card input {
   background: var(--panel);
   border: 1px solid var(--line);
@@ -125,13 +119,9 @@ h1 {
   font-weight: 600;
   cursor: pointer;
 }
-.rotBtn:hover:enabled {
+.rotBtn:hover {
   border-color: var(--gold);
   color: var(--gold);
-}
-.rotBtn:disabled {
-  opacity: 0.4;
-  cursor: default;
 }
 
 .panels {

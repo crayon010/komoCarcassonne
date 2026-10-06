@@ -4,6 +4,10 @@
 
 > 当前版本仅支持单机模式；联机对战的房间与同步代码已就绪（`ONLINE` 开关与 `server.js`），暂未开放入口。
 
+<img width="1640" height="1032" alt="image" src="https://github.com/user-attachments/assets/8a00054a-6008-49e8-becf-b718d2ca2f42" />
+<img width="1640" height="1032" alt="image" src="https://github.com/user-attachments/assets/e6eb8a43-09fd-414f-967d-4ffa64aa7ba2" />
+
+
 ## 运行
 
 ```bash
